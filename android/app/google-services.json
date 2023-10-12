@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "664139402111",
+    "project_id": "dummy-fb4ec",
+    "storage_bucket": "dummy-fb4ec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664139402111:android:593778d41e30d6ecb1684a",
+        "android_client_info": {
+          "package_name": "com.example.dummy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4wNfnn-zgZp3yjbt9QEUHqZpDRIhuBoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
