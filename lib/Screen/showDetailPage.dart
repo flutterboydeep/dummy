@@ -11,6 +11,8 @@ class showdetailpage extends StatefulWidget {
   State<showdetailpage> createState() => _showdetailpageState();
 }
 
+var username = "";
+
 class _showdetailpageState extends State<showdetailpage> {
   // final Stream<QuerySnapshot> studentsStream =
   //     FirebaseFirestore.instance.collection('students').snapshots();
@@ -42,9 +44,12 @@ class _showdetailpageState extends State<showdetailpage> {
           //         document.data()! as Map<String, dynamic>;
           //     return ListTile(
           final userdata = [];
+
           snapshot.data!.docs.map((DocumentSnapshot alldata) {
-            var deep = alldata.data();
-            userdata.add(deep);
+            var map = alldata.data() as Map;
+            map['id'] = alldata.id;
+
+            userdata.add(map);
           }).toList();
           return Scaffold(
             appBar: AppBar(
@@ -57,7 +62,7 @@ class _showdetailpageState extends State<showdetailpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const fillDataFormScreen()),
+                            builder: (context) => fillDataFormScreen()),
                       );
                     },
                     style: ButtonStyle(
@@ -171,8 +176,42 @@ class _showdetailpageState extends State<showdetailpage> {
                               icon: Icon(Icons.edit)),
                           IconButton(
                               onPressed: () {
-                                print(userdata);
-                                // notify();
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          title: Text(
+                                              "Are you sure to delete your detail"),
+                                          content: Text("😲"),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Cancel",
+                                                    style: TextStyle(
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            0,
+                                                            106,
+                                                            255)))),
+                                            TextButton(
+                                                onPressed: () {
+                                                  username = snapshot
+                                                      .data!.docs[i]['name'];
+                                                  deleteUser(userdata[i]['id']);
+                                                },
+                                                child: const Text("Okk",
+                                                    style: TextStyle(
+                                                        color: Colors.red)))
+                                          ],
+                                          contentPadding:
+                                              EdgeInsets.only(left: 150),
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          icon: const Icon(Icons.delete));
+                                    });
                               },
                               icon: Icon(Icons.delete, color: Colors.red))
                         ],
@@ -186,31 +225,18 @@ class _showdetailpageState extends State<showdetailpage> {
         });
   }
 
-  void notify() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text("Are you sure to delete your detail"),
-              content: Text("😲"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Cancel",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 0, 106, 255)))),
-                TextButton(
-                    onPressed: () {},
-                    child:
-                        const Text("Okk", style: TextStyle(color: Colors.red)))
-              ],
-              contentPadding: EdgeInsets.only(left: 150),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              icon: const Icon(Icons.delete));
-        });
+  CollectionReference students =
+      FirebaseFirestore.instance.collection('students');
+  Future deleteUser(id) async {
+    print("user deleted $id");
+    Navigator.of(context).pop();
+    await students.doc(id).delete().then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("$username user succesfully deleted",
+            style: TextStyle(color: Colors.black, fontSize: 20)),
+        backgroundColor: Colors.green,
+      ));
+    });
   }
 }
 
