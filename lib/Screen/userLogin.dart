@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 class userLogin extends StatefulWidget {
@@ -13,10 +15,10 @@ class _userLoginState extends State<userLogin> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  var email;
+  var password;
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
 
   final formkey = GlobalKey<FormState>();
 
@@ -53,7 +55,9 @@ class _userLoginState extends State<userLogin> {
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(right: 10),
-                          child: TextFormField(),
+                          child: TextFormField(
+                            controller: emailCtrl,
+                          ),
                         ),
                       ),
                     ]),
@@ -75,7 +79,9 @@ class _userLoginState extends State<userLogin> {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(right: 10),
-                            child: TextFormField(),
+                            child: TextFormField(
+                              controller: passCtrl,
+                            ),
                           ),
                         ),
                       ],
@@ -83,10 +89,47 @@ class _userLoginState extends State<userLogin> {
                   ]),
                 ),
               ),
+              SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    email = emailCtrl.text.trim();
+                    password = passCtrl.text.trim();
+                    signup();
+                  },
+                  child: Text("Saved"))
             ],
           ),
         ),
       ),
     );
+  }
+
+  void signup() async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then(
+            (value) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("user singning"))),
+          );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Week passowrd")));
+      } else if (e.code == "email-already-in-use") {
+        print("This email already use in");
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("this email already use")));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: const Color.fromARGB(255, 175, 76, 87),
+            content: Text("$e this type of error"),
+          ),
+        );
+      }
+    }
   }
 }
