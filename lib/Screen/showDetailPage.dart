@@ -30,9 +30,9 @@ class _showdetailpageState extends State<showdetailpage> {
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("NO data found"));
-          }
+          // if (snapshot.data!.docs.isEmpty) {
+          //   return Center(child: Text("NO data found"));
+          // }
           // if (snapshot != null && snapshot.data != null) {
           //   // var userdata = snapshot.data!.docs[1]['from'];
           //   // print(userdata);
@@ -47,7 +47,8 @@ class _showdetailpageState extends State<showdetailpage> {
 
           snapshot.data!.docs.map((DocumentSnapshot alldata) {
             var map = alldata.data() as Map;
-            map['id'] = alldata.id;
+            map['id'] =
+                alldata.id; // here id key create in map with document id
 
             userdata.add(map);
           }).toList();
@@ -173,8 +174,8 @@ class _showdetailpageState extends State<showdetailpage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            updateDataForm()));
+                                        builder: (context) => updateDataForm(
+                                            userId: userdata[i]['id'])));
                               },
                               icon: Icon(Icons.edit)),
                           IconButton(

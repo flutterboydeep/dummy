@@ -225,11 +225,11 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
   CollectionReference students =
       FirebaseFirestore.instance.collection("students");
   Future addUser() async {
+    reset();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("user add successfully")));
     await students.add(
         {"name": name, "number": number, "password": password}).then((value) {
-      reset();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("user add successfully")));
       Navigator.pop(
           context, MaterialPageRoute(builder: (context) => showdetailpage()));
     });
