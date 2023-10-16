@@ -32,7 +32,7 @@ class _mainpage extends State<mainpage> {
         if (snapshot.connectionState == ConnectionState.done) {
           print("all is done");
           return MaterialApp(
-            home: const showdetailpage(),
+            home: showdetailpage(),
             title: "learn FireStore",
             theme: ThemeData(primarySwatch: Colors.cyan),
           );
