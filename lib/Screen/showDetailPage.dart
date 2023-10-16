@@ -146,10 +146,13 @@ class _showdetailpageState extends State<showdetailpage> {
                     TableRow(children: [
                       TableCell(
                           child: Container(
-                        child: Text(userdata[i]['name'],
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold)),
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(userdata[i]['name'],
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                         alignment: Alignment.center,
                         height: 40,
                       )),

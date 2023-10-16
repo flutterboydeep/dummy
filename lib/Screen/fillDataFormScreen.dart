@@ -180,9 +180,9 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
                       ElevatedButton(
                         onPressed: () {
                           if (_addFormkey.currentState!.validate()) {
-                            name = namectrl.text.toString();
-                            number = noctrl.text.toString();
-                            password = passctrl.text.toString();
+                            name = namectrl.text.trim();
+                            number = noctrl.text.trim();
+                            password = passctrl.text.trim();
                             addUser();
                           }
                         },
@@ -223,12 +223,15 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
   }
 
   CollectionReference students =
-      FirebaseFirestore.instance.collection("student");
+      FirebaseFirestore.instance.collection("students");
   Future addUser() async {
-    students.add({"name": name, "number": number, "password": password}).then(
-        (value) {
-      Navigator.pop(context as BuildContext,
-          MaterialPageRoute(builder: (context) => showdetailpage()));
+    await students.add(
+        {"name": name, "number": number, "password": password}).then((value) {
+      reset();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("user add successfully")));
+      Navigator.pop(
+          context, MaterialPageRoute(builder: (context) => showdetailpage()));
     });
   }
 }
