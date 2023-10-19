@@ -1,6 +1,7 @@
 import 'package:dummy/Screen/showDetailPage.dart';
 import 'package:dummy/Screen/userLogin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,7 +28,11 @@ class _mainpage extends State<mainpage> {
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           print("i am in Waiting");
-          return const CircularProgressIndicator();
+          return Center(
+            child: CupertinoActivityIndicator(
+              radius: 20,
+            ),
+          );
         }
         if (snapshot.connectionState == ConnectionState.done) {
           print("all is done");

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:dummy/Screen/fillDataFormScreen.dart';
 import 'package:dummy/Screen/updateDataFormScreen.dart';
 import 'package:flutter/material.dart';
@@ -8,32 +8,29 @@ class showdetailpage extends StatefulWidget {
   const showdetailpage({super.key});
 
   @override
-  State<showdetailpage> createState() => _showdetailpageState();
+  State<showdetailpage> createState() => sshowdetailpageState();
 }
 
 var username = "";
 
-class _showdetailpageState extends State<showdetailpage> {
-  // final Stream<QuerySnapshot> studentsStream =
-  //     FirebaseFirestore.instance.collection('students').snapshots();
-
+class sshowdetailpageState extends State<showdetailpage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("students").snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            print("Somethings went wrong in StreamBuilder");
+            return Text("somethings went Wrong in Stream builder");
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
           // if (snapshot.data!.docs.isEmpty) {
           //   return Center(child: Text("NO data found"));
           // }
-          // if (snapshot != null && snapshot.data != null) {
+
           //   // var userdata = snapshot.data!.docs[1]['from'];
           //   // print(userdata);
           //   return Text(snapshot.data!.docs[0]['age']);
@@ -43,15 +40,16 @@ class _showdetailpageState extends State<showdetailpage> {
           //     Map<String, dynamic> data =
           //         document.data()! as Map<String, dynamic>;
           //     return ListTile(
-          final userdata = [];
+          var userdata = [];
 
-          snapshot.data!.docs.map((DocumentSnapshot alldata) {
-            var map = alldata.data() as Map;
-            map['id'] =
-                alldata.id; // here id key create in map with document id
+          snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map maped = document.data()! as Map;
+            maped['id'] = document.id;
+            print(maped); // here id key create in map with document id
 
-            userdata.add(map);
+            userdata.add(maped);
           }).toList();
+
           return Scaffold(
             appBar: AppBar(
               title: const Text("Details page"),
@@ -230,8 +228,8 @@ class _showdetailpageState extends State<showdetailpage> {
   }
 
   CollectionReference students =
-      FirebaseFirestore.instance.collection('students');
-  Future deleteUser(id) async {
+      FirebaseFirestore.instance.collection("students");
+  Future<void> deleteUser(id) async {
     print("user deleted $id");
     Navigator.of(context).pop();
     await students.doc(id).delete().then((value) {
@@ -243,52 +241,3 @@ class _showdetailpageState extends State<showdetailpage> {
     });
   }
 }
-
-
-
-    
-    // Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("hlelo"),
-    //   ),
-    //   body: StreamBuilder<QuerySnapshot>(
-    //       stream:
-    //           FirebaseFirestore.instance.collection("students").snapshots(),
-    //       builder:
-    //           (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    //         if (snapshot.hasError) {
-    //           print("Somethings went wrong in StreamBuilder");
-    //         }
-    //         if (snapshot.connectionState == ConnectionState.waiting) {
-    //           return const Center(
-    //             child: CircularProgressIndicator(),
-    //           );
-    //         }
-    //         if (snapshot.data!.docs.isEmpty) {
-    //           return Center(child: Text("NO data found"));
-    //         }
-    //         if (snapshot != null && snapshot.data != null) {
-    //           // var userdata = snapshot.data!.docs[1]['from'];
-    //           // print(userdata);
-    //           return Text(snapshot.data!.docs[0]['age']);
-    //         }
-    //         // children: snapshot.data!.docs
-    //         //   .map((DocumentSnapshot document) {
-    //         //     Map<String, dynamic> data =
-    //         //         document.data()! as Map<String, dynamic>;
-    //         //     return ListTile(
-    //         final userdata = [];
-    //         snapshot.data!.docs.map((DocumentSnapshot document) {
-    //           Map<String, dynamic> a =
-    //               document.data()! as Map<String, dynamic>;
-
-    //           userdata.add(datab);
-    //         }).toList();
-
-    //         return Container();
-    //       }),
-    // );
-    
-  // }
-
-  

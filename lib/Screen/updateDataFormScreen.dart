@@ -7,10 +7,10 @@ class updateDataForm extends StatefulWidget {
   updateDataForm({super.key, required this.userId});
 
   @override
-  State<StatefulWidget> createState() => _updateDataForm();
+  State<StatefulWidget> createState() => uupdateDataForm();
 }
 
-class _updateDataForm extends State<updateDataForm> {
+class uupdateDataForm extends State<updateDataForm> {
   bool eye = true;
   var icon = const Icon(Icons.visibility_off);
 
@@ -178,7 +178,7 @@ class _updateDataForm extends State<updateDataForm> {
                                 return 'Please Enter Password';
                               } else if (value.length <= 3) {
                                 return 'Password length should be greater then 3';
-                              } else if (!isStrongPass(value)) {
+                              } else if (isStrongPass(value) == false) {
                                 return "Weak Password";
                               } else {
                                 return null;
@@ -219,10 +219,15 @@ class _updateDataForm extends State<updateDataForm> {
     final upperCase = RegExp(r'[A-Z]');
     final lowerCase = RegExp(r'[a-z]');
     final num = RegExp(r'[0-9]');
-
-    return upperCase.hasMatch(pass) &&
+    if (upperCase.hasMatch(pass) &&
         lowerCase.hasMatch(pass) &&
-        num.hasMatch(pass);
+        num.hasMatch(pass)) {
+      return true;
+    }
+    return false;
+    // return upperCase.hasMatch(pass) &&
+    //     lowerCase.hasMatch(pass) &&
+    //     num.hasMatch(pass);
   }
 
   closeEye() {
@@ -249,7 +254,7 @@ class _updateDataForm extends State<updateDataForm> {
   Future<void> updateData(id, name, number, password) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("$name User updated Successfully"),
-      duration: Duration(seconds: 1),
+      duration: Duration(milliseconds: 500),
     ));
     await students.doc(id).update(
         {'name': name, 'number': number, 'password': password}).then((value) {

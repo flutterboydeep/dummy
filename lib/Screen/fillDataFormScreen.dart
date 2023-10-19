@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dummy/Screen/showDetailPage.dart';
+
 import 'package:flutter/material.dart';
 
 class fillDataFormScreen extends StatefulWidget {
@@ -226,12 +226,17 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
       FirebaseFirestore.instance.collection("students");
   Future addUser() async {
     reset();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("user add successfully")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Color.fromARGB(255, 0, 102, 255),
+        duration: Duration(milliseconds: 500),
+        content: Text("user add successfully",
+            style:
+                TextStyle(fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)))));
     await students.add(
         {"name": name, "number": number, "password": password}).then((value) {
-      Navigator.pop(
-          context, MaterialPageRoute(builder: (context) => showdetailpage()));
+      Navigator.of(context).pop();
+      // Navigator.pop(
+      //     context, MaterialPageRoute(builder: (context) => showdetailpage()));
     });
   }
 }
