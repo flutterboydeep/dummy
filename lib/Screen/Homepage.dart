@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dummy/models/Api_models_In_Dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
@@ -21,21 +22,22 @@ class _HomepageState extends State<Homepage> {
   }
 
   var datamap = {};
-  List doneDataList = [];
+  List<DartModel> doneDataList = [];
 
   Future hitApi() async {
     http.Response responce;
-    responce =
-        // await http.get(Uri.parse("https://api.escuelajs.co/api/v1/products"));
-        await http.get(Uri.parse(
-            "https://webhook.site/d63ee272-ee2d-4242-8e59-da895b8f9161"));
+    responce = await http.get(
+        Uri.parse("https://webhook.site/8f28bca0-c0ff-42ec-9ea7-5e717b97a074"));
+    // await http.get(Uri.parse("https://api.escuelajs.co/api/v1/products"));
+    var data = jsonDecode(responce.body.toString());
 
     if (responce.statusCode == 200) {
-      setState(() {
-        doneDataList = jsonDecode(responce.body);
-        // print(doneDataList);
-      });
+      for (Map<String, dynamic> i in data) {
+        doneDataList.add(DartModel.fromJson(i));
+      }
+      return doneDataList;
     }
+    return doneDataList;
   }
 
   // allitem() {
@@ -49,8 +51,7 @@ class _HomepageState extends State<Homepage> {
   //   }
   // }
 
-  List<Widget> imageWidgets = [];
-  showImage() {}
+  String imageUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -82,30 +83,43 @@ class _HomepageState extends State<Homepage> {
 
               // ignore: unnecessary_null_comparison
               return doneDataList.isEmpty
-                  ? Center(child: CupertinoActivityIndicator())
+                  ? Center(
+                      child: CupertinoActivityIndicator(
+                      color: const Color.fromARGB(255, 0, 0, 0),
+                      radius: 30,
+                    ))
                   : GridView.builder(
-                      itemCount: doneDataList.length * 3,
+                      itemCount: doneDataList.length,
 
                       itemBuilder: (context, index) {
-                        int dataIndex = index ~/ 3;
-                        int imageIndex = index % 3;
-                        print(index);
-
-                        return Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Image(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                                doneDataList[dataIndex]['images'][imageIndex]),
-                          ),
+                        var imageIndex = index % 3;
+                        return Stack(
+                          children: [
+                            Image(
+                              fit: BoxFit.fitHeight,
+                              image: NetworkImage(
+                                  // doneDataList[index].images.first
+                                  doneDataList[index].images![imageIndex]),
+                            ),
+                            Text(doneDataList[index].id.toString())
+                          ],
                         );
+
+                        // Image(
+                        //   image: NetworkImage(doneDataList[index].images![1]),
+                        // ),
+                        // Image(
+                        //   image: NetworkImage(doneDataList[index].images![2]),
+                        // ),
                       },
+
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        mainAxisExtent: 200,
-                        mainAxisSpacing: 20,
-                        crossAxisSpacing: 30,
+                        maxCrossAxisExtent: 150,
+                        mainAxisExtent: 150,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 15,
                       ),
+
                       // itemCount: doneDataList.length*3,
                     );
             }),
