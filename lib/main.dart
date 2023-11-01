@@ -24,12 +24,14 @@ class _mainpage extends State<mainpage> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            primarySwatch: Colors.indigo,
-            textButtonTheme: TextButtonThemeData(
-                style: ButtonStyle(
-                    textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(color: Colors.black)))),
-            textTheme: TextTheme(bodyLarge: TextStyle(color: Colors.black))),
+          primarySwatch: Colors.indigo,
+          hintColor: Colors.green,
+          textTheme: TextTheme(
+            titleLarge: TextStyle(fontSize: 18, color: Colors.black),
+            titleMedium: TextStyle(fontSize: 18, color: Colors.black),
+            titleSmall: TextStyle(fontSize: 18, color: Colors.black),
+          ),
+        ),
         home: Homepage());
     // return FutureBuilder(
     //   future: _initialization,

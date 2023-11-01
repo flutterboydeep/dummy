@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:dummy/Screen/shopingDetailPage.dart';
 import 'package:dummy/models/Api_models_In_Dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,14 +29,17 @@ class _HomepageState extends State<Homepage> {
   Future hitApi() async {
     http.Response responce;
     responce = await http.get(
-        Uri.parse("https://webhook.site/8f28bca0-c0ff-42ec-9ea7-5e717b97a074"));
+        Uri.parse("https://webhook.site/8fe2b457-0dc0-4f0c-8793-b95421394a24"));
+    // Uri.parse("https://webhook.site/8f28bca0-c0ff-42ec-9ea7-5e717b97a074"));
     // await http.get(Uri.parse("https://api.escuelajs.co/api/v1/products"));
     var data = jsonDecode(responce.body.toString());
-
-    if (responce.statusCode == 200) {
+    if (doneDataList.isEmpty) {
       for (Map<String, dynamic> i in data) {
         doneDataList.add(DartModel.fromJson(i));
       }
+    }
+
+    if (responce.statusCode == 200) {
       return doneDataList;
     }
     return doneDataList;
@@ -51,23 +56,30 @@ class _HomepageState extends State<Homepage> {
   //   }
   // }
 
-  String imageUrl = '';
-
+  var listIdx = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       endDrawer: Drawer(
 
           // surfaceTintColor: Colors.black,
           ),
       appBar: AppBar(
+        flexibleSpace: ClipRRect(
+            child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+        )),
         // toolbarHeight: 70,
-        scrolledUnderElevation: 0,
+        // scrolledUnderElevation: 0,
         elevation: 0,
-        backgroundColor: Color.fromARGB(131, 78, 74, 74),
-        title: Text("Homepage"),
+        backgroundColor: Colors.black.withAlpha(200),
+        centerTitle: true,
+        title: Text("Homepage",
+            style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255))),
       ),
       body: Container(
+        color: Colors.black.withAlpha(200),
         child: FutureBuilder(
             future: hitApi(),
             builder: (context, snapshot) {
@@ -85,23 +97,106 @@ class _HomepageState extends State<Homepage> {
               return doneDataList.isEmpty
                   ? Center(
                       child: CupertinoActivityIndicator(
-                      color: const Color.fromARGB(255, 0, 0, 0),
+                      color: Color.fromARGB(255, 0, 255, 195),
                       radius: 30,
                     ))
                   : GridView.builder(
                       itemCount: doneDataList.length,
 
                       itemBuilder: (context, index) {
-                        var imageIndex = index % 3;
+                        // imagesArrey();
+
+                        // var imageIndex = index % 3;
                         return Stack(
                           children: [
-                            Image(
-                              fit: BoxFit.fitHeight,
-                              image: NetworkImage(
-                                  // doneDataList[index].images.first
-                                  doneDataList[index].images![imageIndex]),
-                            ),
-                            Text(doneDataList[index].id.toString())
+                            Container(
+                                color: Color.fromARGB(198, 100, 96, 98),
+                                // height: 220,
+                                // decoration: BoxDecoration(
+                                //     border: Border.all(
+                                //         width: 1.5, color: Colors.black)),
+                                child: Column(
+                                  children: [
+                                    Hero(
+                                      tag: 'background_${index}',
+                                      child: InkWell(
+                                        onTap: () {
+                                          for (int i = 0;
+                                              i <
+                                                  doneDataList[index]
+                                                      .images!
+                                                      .length;
+                                              i++) {
+                                            print(i);
+                                            imageUrl.add(
+                                                doneDataList[index].images![i]);
+                                          }
+                                          // imagesArrey();
+                                          print(imageUrl);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      shopingDetail(
+                                                        picture:
+                                                            doneDataList[index]
+                                                                .category!
+                                                                .image
+                                                                .toString(),
+                                                        imageTitle:
+                                                            doneDataList[index]
+                                                                .title
+                                                                .toString(),
+                                                        imageDescription:
+                                                            doneDataList[index]
+                                                                .description
+                                                                .toString(),
+                                                        image: imageUrl,
+                                                      )));
+                                        },
+                                        child: Image(
+                                          height: 170,
+                                          width: 160,
+                                          fit: BoxFit.fitHeight,
+                                          image: NetworkImage(
+                                              // doneDataList[index].images.first
+                                              doneDataList[index]
+                                                  .category!
+                                                  .image
+                                                  .toString()),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+
+                                    RichText(
+                                      text: TextSpan(
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              backgroundColor: Colors.black),
+                                          children: [
+                                            TextSpan(text: "₹ "),
+                                            TextSpan(
+                                                text: doneDataList[index]
+                                                    .price
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 25,
+                                                    color: Colors.red)),
+                                          ]),
+                                    ),
+
+                                    // Text(doneDataList[index].price.toString(),style: TextStyle(fontSize: 25,color:Colors.red),),
+                                  ],
+                                )),
+                            Positioned(
+                                left: 40,
+                                child: Text(doneDataList[index].id.toString(),
+                                    style: TextStyle(fontSize: 20)))
                           ],
                         );
 
@@ -114,10 +209,10 @@ class _HomepageState extends State<Homepage> {
                       },
 
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 150,
-                        mainAxisExtent: 150,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 15,
+                        maxCrossAxisExtent: 200,
+                        mainAxisExtent: 220,
+                        mainAxisSpacing: 30,
+                        crossAxisSpacing: 25,
                       ),
 
                       // itemCount: doneDataList.length*3,
@@ -126,4 +221,14 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+
+  var imageUrl = [];
+
+  // void imagesArrey() {
+  //   for (var i = 0; i < doneDataList.length; i++) {
+  //     for (var j = 0; j < doneDataList[i].images!.length;) {
+  //       imageUrl[j] = doneDataList[i].images![j];
+  //     }
+  //   }
+  // }
 }
