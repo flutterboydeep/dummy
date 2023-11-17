@@ -1,12 +1,12 @@
 import 'package:dummy/Screen/Homepage.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/cupertino.dart';
+import 'package:dummy/provider/countProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    const mainpage(),
+    mainpage(),
   );
 }
 
@@ -21,42 +21,20 @@ class _mainpage extends State<mainpage> {
   // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          hintColor: Colors.green,
-          textTheme: TextTheme(
-            titleLarge: TextStyle(fontSize: 18, color: Colors.black),
-            titleMedium: TextStyle(fontSize: 18, color: Colors.black),
-            titleSmall: TextStyle(fontSize: 18, color: Colors.black),
+    return ChangeNotifierProvider(
+      create: (context) => CountProvider(),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: true,
+          theme: ThemeData(
+            primarySwatch: Colors.indigo,
+            hintColor: Colors.green,
+            textTheme: TextTheme(
+              titleLarge: TextStyle(fontSize: 18, color: Colors.black),
+              titleMedium: TextStyle(fontSize: 18, color: Colors.black),
+              titleSmall: TextStyle(fontSize: 18, color: Colors.black),
+            ),
           ),
-        ),
-        home: Homepage());
-    // return FutureBuilder(
-    //   future: _initialization,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasError) {
-    //       print("Somethings is Error");
-    //     }
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       print("i am in Waiting");
-    //       return Center(
-    //         child: CupertinoActivityIndicator(
-    //           radius: 20,
-    //         ),
-    //       );
-    //     }
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       print("all is done");
-    //       return MaterialApp(
-    //         home: Homepage(),
-    //         title: "learn FireStore",
-    //         theme: ThemeData(primarySwatch: Colors.cyan),
-    //       );
-    //     }
-    //     return const CircularProgressIndicator();
-    //   },
-    // );
+          home: Homepage()),
+    );
   }
 }
