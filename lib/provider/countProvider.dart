@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-class CountProvider with ChangeNotifier {
-  int num = 0;
-  int get number => num;
-  void setNum() {
-    num++;
+class multiProvider with ChangeNotifier {
+  var _sliderValue = 1.0;
+  double get sliderValue {
+    return _sliderValue;
+  }
+
+  void ChangeSlider(double val) {
+    _sliderValue = val;
     notifyListeners();
   }
 }

@@ -2,45 +2,46 @@ import 'package:dummy/provider/countProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Homepage extends StatefulWidget {
-  Homepage({super.key});
-  State<StatefulWidget> createState() => _Homepage();
+class homepage extends StatefulWidget {
+  const homepage({super.key});
+
+  @override
+  State<homepage> createState() => _homepageState();
 }
 
-class _Homepage extends State<Homepage> {
+class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
-    final InProvider = Provider.of<CountProvider>(context, listen: false);
-
-    print("build function run");
+    final sliderProvider = Provider.of<multiProvider>(context, listen: false);
+    print("build function ");
 
     return Scaffold(
-      appBar: AppBar(title: Text("Provider Using Count Example")),
+      appBar: AppBar(
+        title: Text("Multi-Providerusing ex"),
+      ),
       body: Container(
         child: Center(
-          child: Consumer<CountProvider>(
+          child: Consumer<multiProvider>(
             builder: (context, value, child) {
-              return Text(
-                value.number.toString(),
-                style: TextStyle(fontSize: 25),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Slider(
+                      value: sliderProvider.sliderValue,
+                      onChanged: (NewSliderValue) {
+                        sliderProvider.ChangeSlider(NewSliderValue);
+                      }),
+                  Container(
+                    height: 100,
+                    color: const Color.fromARGB(255, 0, 0, 0)
+                        .withOpacity(value.sliderValue),
+                  ),
+                ],
               );
             },
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-          color: Colors.green,
-          shape: CircularNotchedRectangle(),
-          child: Row(
-            children: [IconButton(onPressed: () {}, icon: Icon(Icons.home))],
-          )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          InProvider.setNum();
-        },
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

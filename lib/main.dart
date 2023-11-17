@@ -21,8 +21,12 @@ class _mainpage extends State<mainpage> {
   // final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CountProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => multiProvider(),
+        )
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: true,
           theme: ThemeData(
@@ -34,7 +38,7 @@ class _mainpage extends State<mainpage> {
               titleSmall: TextStyle(fontSize: 18, color: Colors.black),
             ),
           ),
-          home: Homepage()),
+          home: homepage()),
     );
   }
 }
