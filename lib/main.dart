@@ -1,5 +1,6 @@
 import 'package:dummy/Screen/Homepage.dart';
 import 'package:dummy/provider/countProvider.dart';
+import 'package:dummy/provider/favoriteItemProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,9 @@ class _mainpage extends State<mainpage> {
       providers: [
         ChangeNotifierProvider(
           create: (context) => multiProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => favoriteProvider(),
         )
       ],
       child: MaterialApp(
