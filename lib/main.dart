@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final readSimpleProvider = Provider((ref) {
   return 'Hello Deepanshu sir';
 });
+final CounterStateProvider = StateProvider<String?>((ref) {
+  return null;
+});
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();

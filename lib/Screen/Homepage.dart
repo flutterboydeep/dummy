@@ -2,23 +2,31 @@ import 'package:dummy/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// import 'package:provider/provider.dart';
-
-class homepage extends StatelessWidget {
+class homepage extends ConsumerWidget {
+  void OnSubmitted(WidgetRef ref, value) =>
+      ref.read(CounterStateProvider.notifier).update((state) => value);
   @override
-  Widget build(BuildContext context) {
-    // final watchName = ref.watch(readSimpleProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    print("I am build in riverpod");
+    final name = ref.watch(CounterStateProvider) ?? " ";
+    // It is short hands  that if ref.watch(CounterStateProvider)==null ? " ": CounterStateProvider()
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Multi-Providerusing ex"),
       ),
-      body: Container(child: Consumer(
-        builder: (context, ref, child) {
-          final watchName = ref.watch(readSimpleProvider);
-          return Text(watchName);
-        },
-      )),
+      body: Container(
+        child: Center(
+          child: Column(children: [
+            TextField(
+              onSubmitted: (value) {
+                OnSubmitted(ref, value);
+              },
+            ),
+            Padding(padding: EdgeInsets.all(15), child: Text(name.toString()))
+          ]),
+        ),
+      ),
     );
   }
 }
