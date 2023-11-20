@@ -2,14 +2,15 @@ import 'package:dummy/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final CounterStateProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
 class homepage extends ConsumerWidget {
-  void OnSubmitted(WidgetRef ref, value) =>
-      ref.read(CounterStateProvider.notifier).update((state) => value);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print("I am build in riverpod");
-    final name = ref.watch(CounterStateProvider) ?? " ";
-    // It is short hands  that if ref.watch(CounterStateProvider)==null ? " ": CounterStateProvider()
+    final CountProvider = ref.watch(CounterStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -17,15 +18,17 @@ class homepage extends ConsumerWidget {
       ),
       body: Container(
         child: Center(
-          child: Column(children: [
-            TextField(
-              onSubmitted: (value) {
-                OnSubmitted(ref, value);
-              },
-            ),
-            Padding(padding: EdgeInsets.all(15), child: Text(name.toString()))
-          ]),
+          child: Text(
+            CountProvider.toString(),
+            style: TextStyle(fontSize: 40),
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ref.read(CounterStateProvider.notifier).state++;
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
