@@ -4,7 +4,7 @@ import 'package:dummy/Screen/Homepage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final readSimpleProvider = Provider((ref) {
-  return 'Hello Deepanshu';
+  return 'Hello Deepanshu sir';
 });
 
 void main() {

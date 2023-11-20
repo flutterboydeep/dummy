@@ -4,20 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:provider/provider.dart';
 
-class homepage extends ConsumerWidget {
+class homepage extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final watchName = ref.watch(readSimpleProvider);
-    // final sliderProvider = Provider.of<multiProvider>(context, listen: false);
+  Widget build(BuildContext context) {
+    // final watchName = ref.watch(readSimpleProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Multi-Providerusing ex"),
-        actions: [],
       ),
-      body: Container(
-        child: Text(watchName),
-      ),
+      body: Container(child: Consumer(
+        builder: (context, ref, child) {
+          final watchName = ref.watch(readSimpleProvider);
+          return Text(watchName);
+        },
+      )),
     );
   }
 }
