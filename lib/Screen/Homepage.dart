@@ -10,7 +10,7 @@ class homepage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print("I am build in riverpod");
-    final CountProvider = ref.watch(CounterStateProvider);
+    // final CountProvider = ref.watch(CounterStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -18,15 +18,17 @@ class homepage extends ConsumerWidget {
       ),
       body: Container(
         child: Center(
-          child: Text(
-            CountProvider.toString(),
-            style: TextStyle(fontSize: 40),
-          ),
+          child: Consumer(builder: (context, ref, child) {
+            final CountProvider = ref.watch(CounterStateProvider);
+            return Text(CountProvider.toString(),
+                style: TextStyle(fontSize: 50));
+          }),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.read(CounterStateProvider.notifier).state++;
+          ;
         },
         child: Icon(Icons.add),
       ),
