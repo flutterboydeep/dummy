@@ -1,3 +1,4 @@
+import 'package:dummy/Screen/class.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dummy/Screen/Homepage.dart';
@@ -26,8 +27,8 @@ class _mainpage extends State<mainpage> {
     return MaterialApp(
         debugShowCheckedModeBanner: true,
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          hintColor: Colors.green,
+          primarySwatch: Colors.yellow,
+          hintColor: Colors.red,
           textTheme: TextTheme(
             titleLarge: TextStyle(fontSize: 18, color: Colors.black),
             titleMedium: TextStyle(fontSize: 18, color: Colors.black),

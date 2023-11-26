@@ -1,4 +1,4 @@
-import 'package:dummy/main.dart';
+import 'package:dummy/Screen/class.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,9 +7,14 @@ final CounterStateProvider = StateProvider<int>((ref) {
 });
 
 class homepage extends ConsumerWidget {
+  void submit(value, WidgetRef ref) {
+    ref.read(userProvider.notifier).updateName(value);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print("I am build in riverpod");
+    final userInfo = ref.watch(userProvider);
     // final CountProvider = ref.watch(CounterStateProvider);
 
     return Scaffold(
@@ -18,19 +23,49 @@ class homepage extends ConsumerWidget {
       ),
       body: Container(
         child: Center(
-          child: Consumer(builder: (context, ref, child) {
-            final CountProvider = ref.watch(CounterStateProvider);
-            return Text(CountProvider.toString(),
-                style: TextStyle(fontSize: 50));
-          }),
-        ),
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              onSubmitted: (val) {
+                submit(val, ref);
+              },
+              decoration: InputDecoration(
+                  hintText: "Enter your name", helperText: "Enter your name"),
+            ),
+            TextField(
+              onSubmitted: (value) {
+                ref.read(userProvider.notifier).updateAge(int.parse(value));
+              },
+              decoration: InputDecoration(
+                  hintText: "Enter your name", helperText: "Enter your name"),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  child: Text(userInfo.name),
+                  height: 50,
+                  width: 100,
+                  decoration: BoxDecoration(border: Border.all(width: 3)),
+                ),
+                Container(
+                  child: Text(userInfo.age.toString()),
+                  height: 50,
+                  width: 100,
+                  decoration: BoxDecoration(border: Border.all(width: 3)),
+                )
+              ],
+            )
+          ],
+        )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref.read(CounterStateProvider.notifier).state++;
-          ;
-        },
-        child: Icon(Icons.add),
+        onPressed: () {},
+        child: Icon(Icons.send),
       ),
     );
   }
