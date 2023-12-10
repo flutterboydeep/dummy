@@ -1,37 +1,39 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'dart:convert';
+
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class userData {
   String name;
-  int age;
+  int id;
   userData({
     required this.name,
-    required this.age,
+    required this.id,
   });
 
   userData copyWith({
     String? name,
-    int? age,
+    int? id,
   }) {
     return userData(
       name: name ?? this.name,
-      age: age ?? this.age,
+      id: id ?? this.id,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
-      'age': age,
+      'id': id,
     };
   }
 
   factory userData.fromMap(Map<String, dynamic> map) {
     return userData(
       name: map['name'] as String,
-      age: map['age'] as int,
+      id: map['id'] as int,
     );
   }
 
@@ -41,43 +43,15 @@ class userData {
       userData.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'userData(name: $name, age: $age)';
+  String toString() => 'userData(name: $name, id: $id)';
 
   @override
   bool operator ==(covariant userData other) {
     if (identical(this, other)) return true;
 
-    return other.name == name && other.age == age;
+    return other.name == name && other.id == id;
   }
 
   @override
-  int get hashCode => name.hashCode ^ age.hashCode;
-}
-
-class userDataProvider extends StateNotifier<userData> {
-  userDataProvider(super.state);
-
-  void updateName(value) {
-    state = state.copyWith(name: value);
-    // state.name = value;
-  }
-
-  void updateAge(value) {
-    state = state.copyWith(age: value);
-    // state.age = value;
-  }
-}
-
-//  Here is code of changeNotifier
-class userChange extends ChangeNotifier {
-  userData user = userData(name: 'NoName ', age: 0);
-  void changeName(String n) {
-    user = user.copyWith(name: n);
-    notifyListeners();
-  }
-
-  void changeAge(int a) {
-    user = user.copyWith(age: a);
-    notifyListeners();
-  }
+  int get hashCode => name.hashCode ^ id.hashCode;
 }
