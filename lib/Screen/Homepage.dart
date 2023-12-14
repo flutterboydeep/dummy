@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:dummy/Screen/class.dart';
 import 'package:dummy/Screen/homepage.dart';
 import 'package:dummy/Screen/steamFetchData.dart';
-import 'package:dummy/main.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
