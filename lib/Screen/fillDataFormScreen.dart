@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dummy/Screen/showDetailPage.dart';
 import 'package:flutter/material.dart';
 
 class fillDataFormScreen extends StatefulWidget {
@@ -181,9 +183,10 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
                             name = namectrl.text.toString();
                             number = noctrl.text.toString();
                             password = passctrl.text.toString();
+                            addUser();
                           }
                         },
-                        child: const Text("Submit"),
+                        child: const Text("Save"),
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -217,5 +220,15 @@ class _fillDataFormScreen extends State<fillDataFormScreen> {
     return upperCase.hasMatch(pass) &&
         lowerCase.hasMatch(pass) &&
         num.hasMatch(pass);
+  }
+
+  CollectionReference students =
+      FirebaseFirestore.instance.collection("student");
+  Future addUser() async {
+    students.add({"name": name, "number": number, "password": password}).then(
+        (value) {
+      Navigator.pop(context as BuildContext,
+          MaterialPageRoute(builder: (context) => showdetailpage()));
+    });
   }
 }
